@@ -1,5 +1,6 @@
 #include "handler.h"
 #include <QDebug>
+#include <vector>
 #include <stdlib.h>
 
 using namespace std;
@@ -17,7 +18,7 @@ struct Record
     float urbanization;
 };
 
-Record* records = (Record*)malloc(1 * sizeof(Record));
+vector<Record> records;
 
 handler::handler() {}
 
@@ -62,9 +63,23 @@ QStandardItemModel* handler::loadData(std::string path, QString* region)
             arr[i] = str;
             // Конец метода сплит стринг
 
+
+            // Начало метода сет рекорд
+
+            Record record;
+            record.year = atoi(arr[0].c_str());
+            record.region = arr[1];
+            record.npg = atof(arr[2].c_str());
+            record.birthRate = atof(arr[3].c_str());
+            record.deathRate = atof(arr[4].c_str());
+            record.gdw = atof(arr[5].c_str());
+            record.urbanization = atof(arr[6].c_str());
+
+            // Конец метода сет рекорд
+
             if (true)//QString::fromStdString(arr[1]) == region)
             {
-
+                records.push_back(record);
 
                 for (int col = 0; col < 7; col++)
                 {
@@ -126,9 +141,3 @@ void splitString(string input, string output[7])
     output[i] = input;
 }
 
-void setRecord(Record **arr, Record* record, int count)
-{
-    realloc(*arr, (count + 1) * sizeof(Record));
-
-    (*arr)[count] = *record;
-}
