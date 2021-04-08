@@ -21,6 +21,8 @@ private slots:
 
     void on_loadDataButton_clicked();
 
+    void on_calcButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;

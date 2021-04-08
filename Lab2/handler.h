@@ -11,8 +11,8 @@ private:
 
 public:
     handler();
-    static QStandardItemModel* loadData(std::string path, QString* region);
-    static void splitString(std::string input, std::string output[]);
+    static QStandardItemModel* loadData(std::string path, std::string region);
+    static float* calcMatrics(int column);
 };
 
 #endif // HANDLER_H
