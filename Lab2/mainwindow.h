@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QStandardItemModel>
+#include <QVector>
+#include <QPen>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,5 +28,14 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;
+
+    double xBegin, xEnd, xStep;
+    double yBegin, yEnd, yStep;
+    QVector<double> x, y;
+    QVector<double> xLine;
+    QPen* redPen, *greenPen, *orangePen;
+
+    void drawGaphic(float* metrics, int col);
+    void drawLine(double yValue, int inx, QPen* pen, QString name);
 };
 #endif // MAINWINDOW_H

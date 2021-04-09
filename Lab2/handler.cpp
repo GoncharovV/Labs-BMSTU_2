@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <vector>
 #include <stdlib.h>
+#include <QVector>
 
 using namespace std;
 
@@ -40,6 +41,7 @@ QStandardItemModel* handler::loadData(string path, string region)
     {
         QModelIndex index = model->index(0, 0);
         int row = 0;
+        records.clear();
         records.reserve(30);
 
         string arr[7];
@@ -126,20 +128,26 @@ void splitString(string input, string* output)
 
 float* handler::calcMatrics(int column)
 {
-    float* metrics = (float*)malloc(3 * sizeof(float));
+    float* metrics = (float*)malloc(4 * sizeof(float));
+
     if (records.size() == 0)
     {
-        metrics[0] = 0;
+        metrics[3] = 0;
         return metrics;
     }
+
     metrics[0] = records[0].arr[column];
     metrics[1] = records[0].arr[column];
     metrics[2] = records[0].arr[column];
-    if (column == 1 || records.size() == 0) return metrics;
-
+    metrics[3] = 1; // Отвечает за корректность рассчетово
 
     for (int i = 0; i < (int)records.size(); i++)
     {
+        if (records[i].arr[column] == 0) {
+            metrics[3] = 0;
+            return metrics;
+        }
+
         metrics[0] = records[i].arr[column] < metrics[0] ? records[i].arr[column] : metrics[0];
         metrics[1] = records[i].arr[column] > metrics[1] ? records[i].arr[column] : metrics[1];
         metrics[2] += records[i].arr[column];
@@ -148,4 +156,13 @@ float* handler::calcMatrics(int column)
     metrics[2] /= records.size();
 
     return metrics;
+}
+
+void handler::setGraphicVectors(QVector<double> *x, QVector<double> *y, int col)
+{
+    for (int i = 0; i < records.size(); i++)
+    {
+        (*x).push_back(records[i].year);
+        (*y).push_back(records[i].arr[col]);
+    }
 }
