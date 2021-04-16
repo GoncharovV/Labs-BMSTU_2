@@ -4,16 +4,42 @@
 #include <fstream>
 #include <QStandardItemModel>
 
+using namespace std;
+
 class handler
 {
-private:
-    QString** table;
-
 public:
     handler();
-    static QStandardItemModel* loadData(std::string path, std::string region);
-    static float* calcMatrics(int column);
-    static void handler::setGraphicVectors(QVector<double> *x, QVector<double> *y, int col);
+
+    struct Record
+    {
+        int year;
+        string region;
+        float npg;
+        float birthRate;
+        float deathRate;
+        float gdw;
+        float urbanization;
+
+        float arr[7];
+    };
+
+    struct Request {
+        int action;
+        string path;
+        string region;
+        int metricColumn;
+    };
+
+    struct Response {
+        int status;
+        vector<Record>* records;
+        float* metrics;
+    };
+
+    static Response* execute(Request* request);
+
+    static void setGraphicVectors(QVector<double> *x, QVector<double> *y, int col);
 };
 
 #endif // HANDLER_H

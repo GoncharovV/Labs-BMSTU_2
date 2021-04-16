@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <qDebug>
 #include <QMessageBox>
+#include <QVector>
 
 QString fileName;
 
@@ -44,6 +45,14 @@ void MainWindow::on_fileSelect_bttn_clicked()
 
 void MainWindow::on_loadDataButton_clicked()
 {
+    model->setHeaderData(0, Qt::Horizontal, "Год");
+    model->setHeaderData(1, Qt::Horizontal, "Регион");
+    model->setHeaderData(2, Qt::Horizontal, "НПР");
+    model->setHeaderData(3, Qt::Horizontal, "Рождаемость");
+    model->setHeaderData(4, Qt::Horizontal, "Смертность");
+    model->setHeaderData(5, Qt::Horizontal, "ГДВ");
+    model->setHeaderData(6, Qt::Horizontal, "Урбанизация");
+
     QString region = ui->regionTextInput->toPlainText();
 
     if (fileName == "")
@@ -51,35 +60,68 @@ void MainWindow::on_loadDataButton_clicked()
         QMessageBox::about(this, "Ошибка", "Файл не выбран!");
         return;
     }
+    handler::Request* request = new handler::Request;
+    request->action = 0;
+    request->path = fileName.toStdString();
+    request->region = region.toStdString();
 
-    model = handler::loadData(fileName.toStdString(), region.toStdString());
+    handler::Response* response = handler::execute(request);
+
+    if (!response->status)
+    {
+        QMessageBox::about(this, "Ошибка", "Не удалось загрузить данные");
+        return;
+    }
+
+    model = new QStandardItemModel(response->records->size(), 7);
+    QModelIndex index = model->index(0, 0);
+
+    for (int row = 0; row < response->records->size(); row++)
+    {
+        index = model->index(row, 0);
+        model->setData(index, (*(response->records))[row].year);
+        index = model->index(row, 1);
+        model->setData(index, QString::fromStdString((*(response->records))[row].region));
+        index = model->index(row, 2);
+        model->setData(index, (*(response->records))[row].npg);
+        index = model->index(row, 3);
+        model->setData(index, (*(response->records))[row].birthRate);
+        index = model->index(row, 4);
+        model->setData(index, (*(response->records))[row].deathRate);
+        index = model->index(row, 5);
+        model->setData(index, (*(response->records))[row].gdw);
+        index = model->index(row, 6);
+        model->setData(index, (*(response->records))[row].urbanization);
+    }
 
     ui->table->setModel(model);
 }
 
 void MainWindow::on_calcButton_clicked()
 {
-    on_loadDataButton_clicked();
-
     int column = atoi(ui->columnNumber_input->toPlainText().toStdString().c_str()) - 1;
 
     if (column > 1 && column < 7)
     {
-       float* metrics = handler::calcMatrics(column);
+        handler::Request* request = new handler::Request;
+        request->action = 1;
+        request->metricColumn = column;
 
-       if (metrics[3] == 0)
+       handler::Response* response = handler::execute(request);
+
+       if (response->metrics[3] == 0)
        {
            QMessageBox::about(this, "Ошибка", "Невозможно построить метрику при пустых строках");
            return;
        }
 
-       ui->label_min->setText(QString::number(metrics[0], 'g', 5));
-       ui->label_max->setText(QString::number(metrics[1], 'g', 5));
-       ui->label_avg->setText(QString::number(metrics[2], 'g', 5));
+       ui->label_min->setText(QString::number(response->metrics[0], 'g', 5));
+       ui->label_max->setText(QString::number(response->metrics[1], 'g', 5));
+       ui->label_avg->setText(QString::number(response->metrics[2], 'g', 5));
 
-       drawGaphic(metrics, column);
+       drawGaphic(response->metrics, column);
 
-       free(metrics);
+       free(response->metrics);
     }
     else
     {
