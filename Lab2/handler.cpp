@@ -1,126 +1,90 @@
 #include "handler.h"
+#include "filehandler.h"
+#include "metrichandler.h"
+
 #include <QDebug>
 #include <vector>
 #include <stdlib.h>
+#include <QVector>
+
+#define LOAD_DATA 0
+#define CALC_METRICS 1
 
 using namespace std;
 
-ifstream file;
+vector<string>* loadedData;
+vector<handler::Record>* records = new vector<handler::Record>;
 
-struct Record
-{
-    int year;
-    string region;
-    float npg;
-    float birthRate;
-    float deathRate;
-    float gdw;
-    float urbanization;
-};
-
-vector<Record> records;
+void splitString(string input, string* output);
+void setRecord(handler::Record* record, string* arr);
+void setRecords(string region);
 
 handler::handler() {}
 
-QStandardItemModel* handler::loadData(std::string path, QString* region)
+handler::Response* handler::execute(handler::Request* request)
 {
-    file.open(path);
+    handler::Response* response = new handler::Response;
+    response->status = 1;
 
-    QStandardItemModel* model = new QStandardItemModel(2379, 7);
-
-    string str;
-
-    if (!file) {}
-    else
+    switch (request->action)
     {
-        QModelIndex index = model->index(0, 0);
-        int row = 0;
+        case LOAD_DATA:
+            loadedData = FileHandler::loadData(request->path);
 
-        string arr[7];
-        string delimiter = ",";
+            setRecords(request->region);
 
-        int i;
-        getline(file,  str);
+            response->records = records;
+            break;
 
-        while (getline(file,  str))
+        case CALC_METRICS:
+            response->metrics = MetricHandler::calcMatrics(records, request->metricColumn);
+
+            if (response->metrics[3] == 0)
+                response->status = 0;
+            break;
+    }
+
+    return response;
+}
+
+void setRecord(handler::Record* record, string* arr)
+{
+    record->year = atoi(arr[0].c_str());
+    record->region = arr[1];
+    record->npg = atof(arr[2].c_str());
+    record->birthRate = atof(arr[3].c_str());
+    record->deathRate = atof(arr[4].c_str());
+    record->gdw = atof(arr[5].c_str());
+    record->urbanization = atof(arr[6].c_str());
+
+    record->arr[0] = atoi(arr[0].c_str());
+    record->arr[1] = 0;
+    record->arr[2] = atof(arr[2].c_str());
+    record->arr[3] = atof(arr[3].c_str());
+    record->arr[4] = atof(arr[4].c_str());
+    record->arr[5] = atof(arr[5].c_str());
+    record->arr[6] = atof(arr[6].c_str());
+}
+
+void setRecords(string region)
+{
+    string arr[7];
+
+    for (int i = 0; i < loadedData->size(); i++)
+    {
+        splitString((*loadedData)[i], arr);
+
+        if (arr[1] == region || region == "")
         {
-            // Стар метода сплит стринг
-            i = 0;
-
-            size_t pos = 0;
-            string part;
-
-            while ((pos = str.find(delimiter)) != string::npos)
-            {
-                part = str.substr(0, pos);
-
-                arr[i] = part;
-                i++;
-
-                str.erase(0, pos + delimiter.length());
-            }
-
-            arr[i] = str;
-            // Конец метода сплит стринг
-
-
-            // Начало метода сет рекорд
-
-            Record record;
-            record.year = atoi(arr[0].c_str());
-            record.region = arr[1];
-            record.npg = atof(arr[2].c_str());
-            record.birthRate = atof(arr[3].c_str());
-            record.deathRate = atof(arr[4].c_str());
-            record.gdw = atof(arr[5].c_str());
-            record.urbanization = atof(arr[6].c_str());
-
-            // Конец метода сет рекорд
-
-            if (true)//QString::fromStdString(arr[1]) == region)
-            {
-                records.push_back(record);
-
-                for (int col = 0; col < 7; col++)
-                {
-                    index = model->index(row, col);
-                    model->setData(index, QString::fromStdString(arr[col]));
-                }
-
-                row++;
-            }
+            handler::Record record;
+            setRecord(&record, arr);
+            records->push_back(record);
         }
     }
-
-
-
-    file.close();
-
-    model->setHeaderData(0, Qt::Horizontal, "Год");
-    model->setHeaderData(1, Qt::Horizontal, "Регион");
-    model->setHeaderData(2, Qt::Horizontal, "НПР");
-    model->setHeaderData(3, Qt::Horizontal, "Рождаемость");
-    model->setHeaderData(4, Qt::Horizontal, "Смертность");
-    model->setHeaderData(5, Qt::Horizontal, "ГДВ");
-    model->setHeaderData(6, Qt::Horizontal, "Урбанизация");
-
-    return model;
 }
 
-void setTableRow(QStandardItemModel* model, Record* record, int row)
-{
-    QModelIndex index;
 
-    for (int i = 0; i < 7; i++)
-    {
-        index = model->index(row, 0);
-        //model->setData(index, record->)
-    }
-
-
-}
-
-void splitString(string input, string output[7])
+void splitString(string input, string* output)
 {
     string delimiter = ",";
     int i = 0;
@@ -141,3 +105,11 @@ void splitString(string input, string output[7])
     output[i] = input;
 }
 
+void handler::setGraphicVectors(QVector<double> *x, QVector<double> *y, int col)
+{
+    for (int i = 0; i < records->size(); i++)
+    {
+        (*x).push_back((*records)[i].year);
+        (*y).push_back((*records)[i].arr[col]);
+    }
+}

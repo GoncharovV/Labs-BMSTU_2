@@ -1,15 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <math.h>
+#include <cmath>
 #include <QPlainTextEdit>
+#include <QDebug>
 
-#include <iostream>
+int getCountSignsAfter (double num);
+QString removeLastSymb(double num);
 
 double nums[2] = { NULL, NULL };
 int currentNum = 0;
 bool isInteger = true;
 QString operationSign = "";
 int countSignsAfterDot = 0;
+bool zeroPressed = false;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -41,6 +44,20 @@ void MainWindow::numBttnProcessor(double num)
         nums[currentNum] += num / pow(10, countSignsAfterDot);
     }
 
+    zeroPressed = num == 0;
+
+    if (currentNum == 0 && !isInteger && nums[0] == 0 && zeroPressed)
+    {
+        ui->textBox->clear();
+        ui->textBox->setPlainText("0.");
+        for (int i = 0; i < countSignsAfterDot; i++)
+        {
+            ui->textBox->moveCursor(QTextCursor::End);
+            ui->textBox->insertPlainText("0");
+        }
+        return;
+    }
+
     renderText();
 }
 
@@ -52,6 +69,8 @@ void MainWindow::operationBttn()
 
     QPushButton *btn = (QPushButton *)sender();
     operationSign = btn->text();
+
+    zeroPressed = false;
 
     renderText();
 }
@@ -65,12 +84,14 @@ void MainWindow::renderText()
 {
     QString text = QString::number(nums[0], 'g', 15);
 
+    qDebug() << nums[0];
+
     text += operationSign;
 
-    if (currentNum == 1 && nums[1] != NULL)
+    if (currentNum == 1 && (nums[1] != NULL || zeroPressed))
         text += QString::number(nums[1], 'g', 15);
 
-    if (nums[0] == NULL)
+    if (nums[0] == NULL && !zeroPressed)
         ui->textBox->setPlainText("");
     else
         ui->textBox->setPlainText(text);
@@ -92,7 +113,10 @@ void MainWindow::on_calcBttn_clicked()
     }
     else if (operationSign == "/")
     {
-        nums[0] = nums[0] / nums[1];
+        if (nums[1] == 0)
+            nums[1] = 1;
+        else
+            nums[0] = nums[0] / nums[1];
     }
 
     operationSign = "";
@@ -117,8 +141,10 @@ void MainWindow::on_clearBttn_clicked()
 
 void MainWindow::removeNum (int inx)
 {
-    if (isInteger)
+    zeroPressed = false;
+    if (nums[inx] == trunc(nums[inx]))
     {
+        isInteger = true;
         nums[inx] -= (int)nums[inx] % 10;
         nums[inx] /= 10;
 
@@ -126,21 +152,14 @@ void MainWindow::removeNum (int inx)
     }
     else
     {
-        if (countSignsAfterDot == 0) isInteger = true;
-
-        nums[inx] *= pow(10, countSignsAfterDot);
-        nums[inx] -= (int)nums[inx] % 10;
-        nums[inx] /= pow(10, countSignsAfterDot);
-
-        countSignsAfterDot--;
-
-        if (countSignsAfterDot == 0) isInteger = true;
+        QString str = removeLastSymb(nums[inx]);
+        nums[inx] = str.toDouble();
     }
 }
 
 void MainWindow::on_removeBttn_clicked()
 {
-    if (nums[1] != NULL)
+    if (nums[1] != NULL || zeroPressed)
     {
         removeNum(1);
     }
@@ -148,12 +167,31 @@ void MainWindow::on_removeBttn_clicked()
     {
         operationSign = "";
     }
-    else if (nums[0] != NULL)
+    else if (nums[0] != NULL || zeroPressed)
     {
         removeNum(0);
     }
 
     renderText();
+}
+
+int getCountSignsAfter (double num)
+{
+    int value = QString::number(num - trunc(num), 'g', 15).length() - 2;
+    return value > 0? value : 0;
+}
+
+QString removeLastSymb(double num)
+{
+    QString res = "";
+    QString val = QString::number(num);
+
+    for (int i = 0; i < val.length() - 1; i++)
+    {
+        res += val[i];
+    }
+
+    return res;
 }
 
 void MainWindow::on_dotBttn_clicked()
