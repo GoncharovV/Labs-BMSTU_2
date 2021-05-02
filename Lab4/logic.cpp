@@ -34,6 +34,7 @@ float normalization[2] = {50, 400};
 Response* execute(Request* request)
 {
     Response* response = new Response;
+
     switch (request->operation)
     {
         case Operations::LOAD_DATA:
@@ -175,7 +176,7 @@ void freeMatrix(Point** matrix, int rows)
 
 void setPoints(Point** points, int rows, int cols)
 {
-    string arr[20];
+    string arr[SIZE];
 
     for (int i = 0; i < rows; i++)
     {
@@ -205,14 +206,14 @@ void normalize(Point** points, int rows, int cols, float* normalization)
     float *valuesY = new float[size];
     float *valuesZ = new float[size];
 
-    float a = normalization[0];
-    float b = normalization[1];
-
     getValues(points, valuesX, valuesY, valuesZ, rows, cols);
 
     float minX = findMin(valuesX, size), maxX = findMax(valuesX, size);
     float minY = findMin(valuesY, size), maxY = findMax(valuesY, size);
     float minZ = findMin(valuesZ, size), maxZ = findMax(valuesZ, size);
+
+    float a = normalization[0];
+    float b = normalization[1];
 
     for (int i = 0; i < rows; i++)
     {
@@ -269,15 +270,15 @@ void offset(Point** points, int rows, int cols, Request* request)
             switch (request->axis)
             {
                 case Axis::X:
-                    points[i][j].x = points[i][j].x + offset;
+                    points[i][j].x += offset;
                     break;
 
                 case Axis::Y:
-                    points[i][j].y = points[i][j].y + offset;
+                    points[i][j].y += offset;
                     break;
 
                 case Axis::Z:
-                    points[i][j].z = points[i][j].z + offset;
+                    points[i][j].z += offset;
                     break;
             }
         }

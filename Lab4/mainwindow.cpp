@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QPainter>
 
+QPixmap *pix = nullptr;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -15,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+
+    delete pix;
 
     Request* request = new Request;
     request->operation = Operations::FREE_MEMORY;
@@ -140,7 +144,8 @@ void MainWindow::on_normalization_bttn_clicked()
 
 void MainWindow::drawSurface(Point** points, int rows, int cols)
 {
-    QPixmap *pix = new QPixmap(450, 450);
+    delete pix;
+    pix = new QPixmap(450, 450);
     QPainter paint(pix);
     paint.fillRect(0, 0, 450, 450, QBrush(QColor(Qt::GlobalColor::white)));
     paint.setPen(Qt::blue);
