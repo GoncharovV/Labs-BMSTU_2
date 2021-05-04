@@ -490,7 +490,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Диапазон нормировки</string>
+        <string>Диапазон нормализации</string>
        </property>
       </widget>
      </item>

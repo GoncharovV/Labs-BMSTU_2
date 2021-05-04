@@ -1,8 +1,8 @@
 #include "logic.h"
 #include "filehandler.h"
 #include "metrichandler.h"
-
 #include <math.h>
+
 #include <QDebug>
 
 #define SIZE 20
@@ -22,7 +22,7 @@ void offset(Point** points, int rows, int cols, Request* request);
 void getValues(Point** points, float* x, float* y, float* z, int rows, int cols);
 
 
-vector<std::string> *loadedData;
+vector<string> *loadedData;
 
 bool loaded = false, drawed = false;
 bool matrixCreated = false;
@@ -122,7 +122,6 @@ Response* execute(Request* request)
                 response->message = "Значения нормализации установлены. Данные не загружены";
             }
             break;
-
     }
 
     response->rows = SIZE;

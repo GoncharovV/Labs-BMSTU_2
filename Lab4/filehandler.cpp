@@ -1,6 +1,7 @@
 #include "filehandler.h"
 
 using namespace std;
+
 vector<string>* loadData(string path)
 {
     ifstream file;
