@@ -1,26 +1,14 @@
 #include "logic.h"
 #include "filehandler.h"
+#include "drawhandler.h"
 #include "metrichandler.h"
-#include <math.h>
 
 #include <QDebug>
 
 #define SIZE 20
 
 void splitString(string input, string* output);
-
-Point** createMatrix(int rows, int cols);
-void freeMatrix(Point** matrix, int rows);
-
-void setPoint(Point* point, float x, float y, float z);
 void setPoints(Point** points, int rows, int cols);
-
-void normalize(Point** points, int rows, int cols, float* normalization);
-void rotate(Point** points, int rows, int cols, Request* request);
-void offset(Point** points, int rows, int cols, Request* request);
-
-void getValues(Point** points, float* x, float* y, float* z, int rows, int cols);
-
 
 vector<string> *loadedData;
 
@@ -28,6 +16,7 @@ bool loaded = false, drawed = false;
 bool matrixCreated = false;
 
 Point** points;
+Line* lines = new Line[(SIZE - 1) * SIZE * 2];
 
 float normalization[2] = {50, 400};
 
@@ -55,23 +44,26 @@ Response* execute(Request* request)
             break;
 
         case Operations::FREE_MEMORY:
-            freeMatrix(points, SIZE);
+            freePointMatrix(points, SIZE);
+            delete [] lines;
             break;
 
         case Operations::DRAW:
             if (loaded)
             {
                 if (matrixCreated)
-                    freeMatrix(points, SIZE);
+                    freePointMatrix(points, SIZE);
 
-                points = createMatrix(SIZE, SIZE);
+                points = createPointMatrix(SIZE, SIZE);
                 matrixCreated = true;
 
                 setPoints(points, SIZE, SIZE);
 
                 normalize(points, SIZE, SIZE, normalization);
 
-                response->points = points;
+                setLines(points, lines, SIZE, SIZE);
+
+                response->lines = lines;
             }
             else
             {
@@ -83,9 +75,11 @@ Response* execute(Request* request)
         case Operations::ROTATE:
             if (loaded)
             {
-                rotate(points, SIZE, SIZE, request);
+                rotate(points, SIZE, SIZE, request->axis, request->rotationAngle);
                 normalize(points, SIZE, SIZE, normalization);
-                response->points = points;
+                setLines(points, lines, SIZE, SIZE);
+
+                response->lines = lines;
             }
             else
             {
@@ -97,8 +91,10 @@ Response* execute(Request* request)
         case Operations::OFFSET:
             if (loaded)
             {
-                offset(points, SIZE, SIZE, request);
-                response->points = points;
+                offset(points, SIZE, SIZE, request->axis, request->offsetValue);
+                setLines(points, lines, SIZE, SIZE);
+
+                response->lines = lines;
             }
             else
             {
@@ -114,7 +110,9 @@ Response* execute(Request* request)
             if (loaded)
             {
                 normalize(points, SIZE, SIZE, normalization);
-                response->points = points;
+                setLines(points, lines, SIZE, SIZE);
+
+                response->lines = lines;
             }
             else
             {
@@ -124,8 +122,7 @@ Response* execute(Request* request)
             break;
     }
 
-    response->rows = SIZE;
-    response->cols = SIZE;
+    response->lineCount = (SIZE - 1) * SIZE * 2;
 
     return response;
 }
@@ -151,28 +148,6 @@ void splitString(string input, string* output)
     output[i] = input;
 }
 
-Point** createMatrix(int rows, int cols)
-{
-    Point** matrix = new Point* [rows];
-
-    for (int i = 0; i < rows; i++)
-    {
-        matrix[i] = new Point[cols];
-    }
-
-    return matrix;
-}
-
-void freeMatrix(Point** matrix, int rows)
-{
-    for (int i = 0; i < rows; i++)
-    {
-        delete [] matrix[i];
-    }
-
-    delete matrix;
-}
-
 void setPoints(Point** points, int rows, int cols)
 {
     string arr[SIZE];
@@ -187,114 +162,6 @@ void setPoints(Point** points, int rows, int cols)
             setPoint(&point, (float)i, (float)j, (float)atof(arr[j].c_str()));
 
             points[i][j] = point;
-        }
-    }
-}
-
-void setPoint(Point* point, float x, float y, float z)
-{
-    point->x = x;
-    point->y = y;
-    point->z = z;
-}
-
-void normalize(Point** points, int rows, int cols, float* normalization)
-{
-    int size = rows * cols;
-    float *valuesX = new float[size];
-    float *valuesY = new float[size];
-    float *valuesZ = new float[size];
-
-    getValues(points, valuesX, valuesY, valuesZ, rows, cols);
-
-    float minX = findMin(valuesX, size), maxX = findMax(valuesX, size);
-    float minY = findMin(valuesY, size), maxY = findMax(valuesY, size);
-    float minZ = findMin(valuesZ, size), maxZ = findMax(valuesZ, size);
-
-    float a = normalization[0];
-    float b = normalization[1];
-
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            points[i][j].x = a + ((points[i][j].x - minX) * (b - a) / (maxX - minX));
-            points[i][j].y = a + ((points[i][j].y - minY) * (b - a) / (maxY - minY));
-            points[i][j].z = a + ((points[i][j].z - minZ) * (b - a) / (maxZ - minZ));
-        }
-    }
-
-    delete [] valuesX;
-    delete [] valuesY;
-    delete [] valuesZ;
-}
-
-void rotate(Point** points, int rows, int cols, Request* request)
-{
-    float angle = request->rotationAngle;
-
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            switch (request->axis)
-            {
-                case Axis::X:
-                    points[i][j].y = points[i][j].y * cos(angle) - points[i][j].z * sin(angle);
-                    points[i][j].z = points[i][j].z * cos(angle) + points[i][j].y * sin(angle);
-                    break;
-
-                case Axis::Y:
-                    points[i][j].x = points[i][j].x * cos(angle) + points[i][j].z * sin(angle);
-                    points[i][j].z = points[i][j].z * cos(angle) - points[i][j].x * sin(angle);
-                    break;
-
-                case Axis::Z:
-                    points[i][j].x = points[i][j].x * cos(angle) - points[i][j].y * sin(angle);
-                    points[i][j].y = points[i][j].y * cos(angle) + points[i][j].x * sin(angle);
-                    break;
-            }
-        }
-    }
-}
-
-void offset(Point** points, int rows, int cols, Request* request)
-{
-    float offset = request->offsetValue;
-
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            switch (request->axis)
-            {
-                case Axis::X:
-                    points[i][j].x += offset;
-                    break;
-
-                case Axis::Y:
-                    points[i][j].y += offset;
-                    break;
-
-                case Axis::Z:
-                    points[i][j].z += offset;
-                    break;
-            }
-        }
-    }
-}
-
-void getValues(Point** points, float* x, float* y, float* z, int rows, int cols)
-{
-    int inx = 0;
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            x[inx] = points[i][j].x;
-            y[inx] = points[i][j].y;
-            z[inx] = points[i][j].z;
-            inx++;
         }
     }
 }

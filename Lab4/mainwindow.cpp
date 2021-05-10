@@ -69,7 +69,7 @@ void MainWindow::on_draw_bttn_clicked()
         return;
     }
 
-    drawSurface(response->points, response->rows, response->cols);
+    drawSurface(response->lines, response->lineCount);
 
     delete request;
     delete response;
@@ -136,13 +136,13 @@ void MainWindow::on_normalization_bttn_clicked()
         return;
     }
 
-    drawSurface(response->points, response->rows, response->cols);
+    drawSurface(response->lines, response->lineCount);
 
     delete request;
     delete response;
 }
 
-void MainWindow::drawSurface(Point** points, int rows, int cols)
+void MainWindow::drawSurface(Line* lines, int count)
 {
     delete pix;
     pix = new QPixmap(450, 450);
@@ -150,34 +150,17 @@ void MainWindow::drawSurface(Point** points, int rows, int cols)
     paint.fillRect(0, 0, 450, 450, QBrush(QColor(Qt::GlobalColor::white)));
     paint.setPen(Qt::blue);
 
-    for (int i = 0; i < rows; i++)
+    for (int i = 0; i < count; i++)
     {
-        for (int j = 0; j < cols; j++)
-        {
-            paint.drawPoint(points[i][j].x, points[i][j].y);
-        }
-    }
-
-    for (int i = 0; i < rows - 1; i++)
-    {
-        for (int j = 0; j < cols - 1; j++)
-        {
-            paint.drawLine(points[i][j].x, points[i][j].y, points[i][j + 1].x, points[i][j + 1].y);
-            paint.drawLine(points[i][j].x, points[i][j].y, points[i + 1][j].x, points[i + 1][j].y);
-        }
-    }
-
-    for (int i = 0; i < rows - 1; i++)
-    {
-        paint.drawLine(points[i][cols - 1].x, points[i][cols - 1].y, points[i + 1][cols - 1].x, points[i + 1][cols - 1].y);
-    }
-
-    for (int i = 0; i < cols - 1; i++)
-    {
-        paint.drawLine(points[rows - 1][i].x, points[rows - 1][i].y, points[rows - 1][i + 1].x, points[rows - 1][i + 1].y);
+        drawLine(&paint, &(lines[i]));
     }
 
     ui->draw_label->setPixmap(*pix);
+}
+
+void MainWindow::drawLine(QPainter* paint, Line* line)
+{
+    paint->drawLine(line->start.x, line->start.y, line->end.x, line->end.y);
 }
 
 void MainWindow::displayError(string message)
@@ -215,7 +198,7 @@ void MainWindow::rotationHandler(Axis axis, int direction)
         return;
     }
 
-    drawSurface(response->points, response->rows, response->cols);
+    drawSurface(response->lines, response->lineCount);
 
     delete request;
     delete response;
@@ -249,7 +232,7 @@ void MainWindow::offsetHandler(Axis axis)
         return;
     }
 
-    drawSurface(response->points, response->rows, response->cols);
+    drawSurface(response->lines, response->lineCount);
 
     delete request;
     delete response;

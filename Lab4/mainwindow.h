@@ -48,7 +48,9 @@ private:
 
     void displayError(std::string message);
 
-    void drawSurface(Point** points, int rows, int cols);
+    void drawSurface(Line* lines, int count);
+
+    void drawLine(QPainter* paint, Line* line);
 
     void rotationHandler(Axis axis, int direction = 1);
 

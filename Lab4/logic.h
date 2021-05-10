@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "drawhandler.h"
+
 using namespace std;
 
 enum Operations
@@ -14,20 +16,6 @@ enum Operations
     OFFSET,
     NORMALIZE,
     FREE_MEMORY
-};
-
-enum Axis
-{
-    X,
-    Y,
-    Z
-};
-
-struct Point
-{
-    float x;
-    float y;
-    float z;
 };
 
 struct Request
@@ -44,17 +32,11 @@ struct Response
 {
     bool done = true;
     string message;
-    int rows;
-    int cols;
+    int lineCount;
 
-    Point** points;
+    Line* lines;
 };
 
 Response* execute(Request* request);
-
-
-
-
-
 
 #endif // LOGIC_H
