@@ -147,11 +147,12 @@ void getValues(Point** points, float* x, float* y, float* z, int rows, int cols)
     }
 }
 
-void setLines(Point** points, Line* lines, int rows, int cols)
+void projectLines(Point** points, Line* lines, int rows, int cols)
 {
     int inx = 0;
 
-    for (int i = 0; i < rows - 1; i++)
+    // Projecting horizontal lines
+    for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols - 1; j++)
         {
@@ -160,30 +161,19 @@ void setLines(Point** points, Line* lines, int rows, int cols)
             lines[inx].end.x = points[i][j + 1].x;
             lines[inx].end.y = points[i][j + 1].y;
             inx++;
+        }
+    }
 
+    // Projecting vertical lines
+    for (int i = 0; i < rows - 1; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
             lines[inx].start.x = points[i][j].x;
             lines[inx].start.y = points[i][j].y;
             lines[inx].end.x = points[i + 1][j].x;
             lines[inx].end.y = points[i + 1][j].y;
             inx++;
         }
-    }
-
-    for (int i = 0; i < rows - 1; i++)
-    {
-        lines[inx].start.x = points[i][cols - 1].x;
-        lines[inx].start.y = points[i][cols - 1].y;
-        lines[inx].end.x = points[i + 1][cols - 1].x;
-        lines[inx].end.y = points[i + 1][cols - 1].y;
-        inx++;
-    }
-
-    for (int i = 0; i < cols - 1; i++)
-    {
-        lines[inx].start.x = points[rows - 1][i].x;
-        lines[inx].start.y = points[rows - 1][i].y;
-        lines[inx].end.x = points[rows - 1][i + 1].x;
-        lines[inx].end.y = points[rows - 1][i + 1].y;
-        inx++;
     }
 }

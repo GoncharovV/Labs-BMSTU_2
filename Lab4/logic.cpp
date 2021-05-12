@@ -61,7 +61,7 @@ Response* execute(Request* request)
 
                 normalize(points, SIZE, SIZE, normalization);
 
-                setLines(points, lines, SIZE, SIZE);
+                projectLines(points, lines, SIZE, SIZE);
 
                 response->lines = lines;
             }
@@ -77,7 +77,7 @@ Response* execute(Request* request)
             {
                 rotate(points, SIZE, SIZE, request->axis, request->rotationAngle);
                 normalize(points, SIZE, SIZE, normalization);
-                setLines(points, lines, SIZE, SIZE);
+                projectLines(points, lines, SIZE, SIZE);
 
                 response->lines = lines;
             }
@@ -92,7 +92,7 @@ Response* execute(Request* request)
             if (loaded)
             {
                 offset(points, SIZE, SIZE, request->axis, request->offsetValue);
-                setLines(points, lines, SIZE, SIZE);
+                projectLines(points, lines, SIZE, SIZE);
 
                 response->lines = lines;
             }
@@ -110,7 +110,7 @@ Response* execute(Request* request)
             if (loaded)
             {
                 normalize(points, SIZE, SIZE, normalization);
-                setLines(points, lines, SIZE, SIZE);
+                projectLines(points, lines, SIZE, SIZE);
 
                 response->lines = lines;
             }

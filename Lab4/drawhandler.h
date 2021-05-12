@@ -39,6 +39,6 @@ void freePointMatrix(Point** matrix, int rows);
 void setPoint(Point* point, float x, float y, float z);
 
 void getValues(Point** points, float* x, float* y, float* z, int rows, int cols);
-void setLines(Point** points, Line* lines, int rows, int cols);
+void projectLines(Point** points, Line* lines, int rows, int cols);
 
 #endif // DRAWHANDLER_H
