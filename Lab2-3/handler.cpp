@@ -21,6 +21,9 @@ void setRecords(string region);
 
 handler::handler() {}
 
+bool isLoaded = false;
+string oldPath;
+
 handler::Response* handler::execute(handler::Request* request)
 {
     handler::Response* response = new handler::Response;
@@ -29,7 +32,16 @@ handler::Response* handler::execute(handler::Request* request)
     switch (request->action)
     {
         case LOAD_DATA:
-            loadedData = FileHandler::loadData(request->path);
+            if (!isLoaded || request->path != oldPath)
+            {
+                loadedData = FileHandler::loadData(request->path);
+                isLoaded = true;
+                oldPath = request->path;
+            }
+            else
+            {
+                records->clear();
+            }
 
             setRecords(request->region);
 
