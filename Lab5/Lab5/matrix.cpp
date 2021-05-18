@@ -7,12 +7,9 @@ matrix<T>::matrix(unsigned int n, unsigned int m)
 	this->n = n;
 	this->m = m;
 
-	_matrix = new T* [n];
+	this->size = n * m;
 
-	for (int row = 0; row < n; row++)
-	{
-		_matrix[row] = new T[m];
-	}
+	_matrix = new T [this->size];
 }
 
 // Конструктор копирования
@@ -22,13 +19,11 @@ matrix<T>::matrix(matrix<T>& matr)
 	n = matr.get_n();
 	m = matr.get_m();
 
-	_matrix = new T * [n];
+	size = n * m;
 
-	for (int row = 0; row < n; row++)
-	{
-		_matrix[row] = new T[m];
-	}
+	_matrix = new T [size];
 
+	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -42,11 +37,6 @@ matrix<T>::matrix(matrix<T>& matr)
 template<typename T>
 matrix<T>::~matrix()
 {
-	for (int row = 0; row < n; row++)
-	{
-		delete[] _matrix[row];
-	}
-
 	delete [] _matrix;
 }
 
@@ -64,6 +54,12 @@ unsigned int matrix<T>::get_m()
 	return m;
 }
 
+template<typename T>
+unsigned int matrix<T>::get_size()
+{
+	return size;;
+}
+
 // Проверить является ли матрица квадратной
 template<typename T>
 bool matrix<T>::is_square()
@@ -76,14 +72,14 @@ template<typename T>
 void matrix<T>::set_elem(unsigned int n, unsigned int m, T& elem)
 {
 	if (n < this->n && m < this->m)
-		_matrix[n][m] = elem;
+		_matrix[n * this->get_n() + m] = elem;
 }
 
 // Получить элемент матрицы по индексам
 template<typename T>
 T& matrix<T>::get_elem(unsigned int n, unsigned int m)
 {
-	return _matrix[n][m];
+	return _matrix[n * this->get_n() + m];
 }
 
 // Перегрузка оператора присваивания
@@ -95,13 +91,9 @@ matrix<T>& matrix<T>::operator=(matrix<T>& matr)
 	n = matr.get_n();
 	m = matr.get_m();
 
-	_matrix = new T * [n];
+	_matrix = new T [matr.get_size()];
 
-	for (int row = 0; row < n; row++)
-	{
-		_matrix[row] = new T[m];
-	}
-
+	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -117,6 +109,7 @@ matrix<T>& matrix<T>::operator=(matrix<T>& matr)
 template<typename T>
 matrix<T>& matrix<T>::operator+=(matrix<T>& matr)
 {
+	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -132,6 +125,7 @@ matrix<T>& matrix<T>::operator+=(matrix<T>& matr)
 template<typename T>
 matrix<T>& matrix<T>::operator-=(matrix<T>& matr)
 {
+	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -184,9 +178,9 @@ matrix<_T> operator*(matrix<_T>& m1, matrix<_T>& m2)
 			sum = 0;
 			for (int p = 0; p < m; p++)
 			{
-				sum += m1[i][p] * m2[p][j];
+				sum += m1[i * n + p] * m2[p * n + j];
 			}
-			tmp[i][j] = sum;
+			tmp[i * n + j] = sum;
 		}
 	}
 

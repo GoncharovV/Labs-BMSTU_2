@@ -1,14 +1,5 @@
 ﻿  main.cpp
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(12,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(6): message : во время компиляции функции-члена класс шаблон "matrix<int>::matrix(unsigned int,unsigned int)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(7): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int>::matrix(unsigned int,unsigned int)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(7): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<int>"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(45,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(44): message : во время компиляции функции-члена класс шаблон "matrix<int>::~matrix(void)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(7): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int>::~matrix(void)"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(199,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\main.cpp(37): message : выполняется компиляция ссылки на экземпляр шаблон функции "std::ostream &operator <<<int>(std::ostream &,matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(201,25): warning C4018: <: несоответствие типов со знаком и без знака
-  matrix.cpp
-  Создание кода...
-  Lab5.vcxproj -> G:\Documents\Qt\Lab5\Debug\Lab5.exe
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(193,24): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(37): message : выполняется компиляция ссылки на экземпляр шаблон функции "std::ostream &operator <<<int>(std::ostream &,matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(195,25): warning C4018: <: несоответствие типов со знаком и без знака
+  Lab5.vcxproj -> C:\qt_proj\Labs-BMSTU_2\Lab5\Debug\Lab5.exe

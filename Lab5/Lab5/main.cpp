@@ -28,21 +28,16 @@ int main()
 
 	//matr1 = matr1 + matr2;
 
-	//matrix<int>::Iterator<int> it(matr1);
+	matrix<int>::Iterator it(matr1);
 
 	
 
-	Iterator<int> it(matr1);
+	//Iterator<int> it(matr1);
 
 	cout << matr1;
-	/*
-
-	cout << matr;
 
 	cout << endl; 
 
 	cout << matr2;
-
-	*/
 
 }

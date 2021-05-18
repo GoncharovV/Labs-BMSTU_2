@@ -20,6 +20,8 @@ public:
 
 	unsigned int get_m();
 
+	unsigned int get_size();
+
 	bool is_square();
 
 	void set_elem(unsigned int n, unsigned int m, T& elem);
@@ -65,20 +67,21 @@ public:
 	//Iterator<T> iterator_end();
 
 	//template<typename _T>
-	//class Iterator
-	//{
-	//	Iterator<_T>(matrix<_T>& matr)
-	//	{
-	//		std::cout << "Использован констуктр";
-	//	};
-	//};
+	class Iterator
+	{
+		Iterator(matrix<T>& matr)
+		{
+			std::cout << "Использован констуктр";
+		};
+	};
 
 
 
 private:
 	unsigned int n, m;
+	unsigned int size;
 
-	T **_matrix;
+	T *_matrix;
 };
 
 template <typename T>
@@ -87,27 +90,20 @@ class Iterator
 	template<typename _T>
 	Iterator<T>(matrix<T>& matr)
 	{
-		std::cout << "Произошёл итератор";
+		//pos = 0;
+		//std::cout << "Произошёл итератор";
 	}
 
 private: 
-	int n_pos;
-	int m_pos;
+	unsigned int n;
+	unsigned int m;
 
-	int n;
-	int m;
+	unsigned int size;
+	unsigned int pos;
 
 	bool change_pos(int value)
 	{
-		int sign = value / abs(value);
 
-		value = abs(value);
-
-		m_pos += (value / n) * sign;
-
-		if ()
-
-		n_pos += (value % n) * sign;
 	}
 };
 

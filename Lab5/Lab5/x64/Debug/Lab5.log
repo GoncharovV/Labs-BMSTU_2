@@ -1,0 +1,12 @@
+﻿  main.cpp
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(33,11): error C2059: синтаксическая ошибка: <
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(31): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<T>::Iterator"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(40): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<T>"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(33,1): error C2238: непредвиденные лексемы перед ";"
+  matrix.cpp
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(33,11): error C2059: синтаксическая ошибка: <
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(31): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<T>::Iterator"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(40): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<T>"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.h(33,1): error C2238: непредвиденные лексемы перед ";"
+  matrix_iterator.cpp
+  Создание кода...
