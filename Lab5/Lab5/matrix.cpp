@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-// Основной конструктор
+// Simple Constructor
 template<typename T>
 matrix<T>::matrix(unsigned int n, unsigned int m)
 {
@@ -12,7 +12,7 @@ matrix<T>::matrix(unsigned int n, unsigned int m)
 	_matrix = new T [this->size];
 }
 
-// Конструктор копирования
+// Copy Constructor
 template<typename T>
 matrix<T>::matrix(matrix<T>& matr)
 {
@@ -23,7 +23,6 @@ matrix<T>::matrix(matrix<T>& matr)
 
 	_matrix = new T [size];
 
-	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -33,41 +32,72 @@ matrix<T>::matrix(matrix<T>& matr)
 	}
 }
 
-// Деструктор
+// Transfer Constructor
+template<typename T>
+matrix<T>::matrix(matrix<T>&& mat) : n(mat.get_n()), m(mat.get_m()), size(mat.get_size()), _matrix(mat.get_matrix())
+{
+	_matrix = nullptr;
+}
+
+// Constructor with initializer_list
+template<typename T>
+matrix<T>::matrix(std::initializer_list<std::initializer_list<T>> lst)
+{	
+	this->n = lst.size();
+	this->m = lst.size();
+
+	this->size = n * m;
+
+	_matrix = new T[this->size];
+
+	Iterator<T> it(*this);
+
+	for (auto row : lst)
+	{
+		for (auto elem : row)
+		{
+			*it = elem;
+			it.next();
+		}
+	}
+}
+
+// Destructor
 template<typename T>
 matrix<T>::~matrix()
 {
 	delete [] _matrix;
 }
 
-// Получить количество строк
+// Get row count
 template<typename T>
 unsigned int matrix<T>::get_n()
 {
 	return n;
 }
 
-// Получить количество столбцов
+// Get column count
 template<typename T>
 unsigned int matrix<T>::get_m()
 {
 	return m;
 }
 
+// Get count of matrix elements 
 template<typename T>
 unsigned int matrix<T>::get_size()
 {
-	return size;;
+	return size;
 }
 
-// Проверить является ли матрица квадратной
+// Is matrix squeare
 template<typename T>
 bool matrix<T>::is_square()
 {
 	return n == m;
 }
 
-// Установить значение элементу матрицы
+// Set matrix element
 template<typename T>
 void matrix<T>::set_elem(unsigned int n, unsigned int m, T& elem)
 {
@@ -75,25 +105,39 @@ void matrix<T>::set_elem(unsigned int n, unsigned int m, T& elem)
 		_matrix[n * this->get_n() + m] = elem;
 }
 
-// Получить элемент матрицы по индексам
+// Get matrix element by index (n, m)
 template<typename T>
 T& matrix<T>::get_elem(unsigned int n, unsigned int m)
 {
 	return _matrix[n * this->get_n() + m];
 }
 
-// Перегрузка оператора присваивания
+// Get matrix element by index (inx)
+template<typename T>
+T& matrix<T>::get_elem(unsigned int inx)
+{
+	return _matrix[inx];
+}
+
+template<typename T>
+T* matrix<T>::get_matrix()
+{
+	return _matrix;
+}
+
+// Assignment operator overloading
 template<typename T>
 matrix<T>& matrix<T>::operator=(matrix<T>& matr)
 {
 	delete _matrix;
 
-	n = matr.get_n();
-	m = matr.get_m();
+	this->n = matr.get_n();
+	this->m = matr.get_m();
+
+	this->size = matr.get_size();
 
 	_matrix = new T [matr.get_size()];
 
-	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -105,11 +149,10 @@ matrix<T>& matrix<T>::operator=(matrix<T>& matr)
 	return *this;
 }
 
-// Перегрузка оператора +=
+// += operator overloading
 template<typename T>
 matrix<T>& matrix<T>::operator+=(matrix<T>& matr)
 {
-	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
@@ -122,39 +165,71 @@ matrix<T>& matrix<T>::operator+=(matrix<T>& matr)
 	return *this;
 }
 
+// -= operator overloading
 template<typename T>
 matrix<T>& matrix<T>::operator-=(matrix<T>& matr)
 {
-	// TODO: CHANGE TO ITERATOR
 	for (int row = 0; row < matr.get_n(); row++)
 	{
 		for (int col = 0; col < matr.get_m(); col++)
 		{
-			_matrix.set_elem(row, col, this->get_elem(row, col) - matr.get_elem(row, col));
+			T value = this->get_elem(row, col) - matr.get_elem(row, col);
+			this->set_elem(row, col, value);
 		}
 	}
 
 	return *this;
 }
 
+// () operator overloading [ equivalent to get_elem(i, j) ]
 template<typename T>
 T& matrix<T>::operator()(unsigned int i, unsigned int j)
 {
 	return this->get_elem(i, j);
 }
 
-template<typename _T>
-matrix<_T> operator+(matrix<_T>& m1, matrix<_T>& m2)
+template<typename T>
+Iterator<T> matrix<T>::iterator_begin()
 {
-	matrix<_T> tmp(m1);
+	Iterator<T> it(*this);
+	return it;
+}
 
-	tmp += m2;
+template<typename T>
+Iterator<T> matrix<T>::iterator_end()
+{
+	Iterator<T> it(*this);
+	
+	for (int i = 0; i < it.get_size() - 1; i++)
+	{
+		it.next();
+	}
 
-	return tmp;
+	return it;
 }
 
 template<typename _T>
-matrix<_T> operator-(matrix<_T>& m1, matrix<_T>& m2)
+matrix<_T> operator +(matrix<_T>& m1, matrix<_T>& m2)
+{
+	unsigned int n = m1.get_n();
+	unsigned int m = m1.get_m();
+
+	matrix<_T> res(n, m);
+
+	for (unsigned int row = 0; row < n; row++)
+	{
+		for (unsigned int col = 0; col < m; col++)
+		{
+			_T value = m1.get_elem(row, col) + m2.get_elem(row, col);
+			res.set_elem(row, col, value);
+		}
+	}
+
+	return res;
+}
+
+template<typename _T>
+matrix<_T> operator -(matrix<_T>& m1, matrix<_T>& m2)
 {
 	matrix<_T> tmp(m1);
 
@@ -164,7 +239,7 @@ matrix<_T> operator-(matrix<_T>& m1, matrix<_T>& m2)
 }
 
 template<typename _T>
-matrix<_T> operator*(matrix<_T>& m1, matrix<_T>& m2)
+matrix<_T> operator *(matrix<_T>& m1, matrix<_T>& m2)
 {
 	unsigned int n = m1.get_n();
 	unsigned int m = m2.get_m();
@@ -188,7 +263,48 @@ matrix<_T> operator*(matrix<_T>& m1, matrix<_T>& m2)
 }
 
 template<typename _T>
-std::ostream& operator<<(std::ostream& os, matrix<_T>& matr)
+matrix<_T> operator/(matrix<_T>& m1, double num)
+{
+	unsigned int n = m1.get_n();
+	unsigned int m = m1.get_m();
+
+
+	matrix<_T> res(n, m);
+
+	for (int row = 0; row < n; row++)
+	{
+		for (int col = 0; col < m; col++)
+		{
+			_T value = m1.get_elem(row, col) / num;
+			res.set_elem(row, col, value);
+		}
+	}
+
+	return res;
+}
+
+template<typename _T>
+matrix<_T> operator*(matrix<_T>& m1, double num)
+{
+	unsigned int n = m1.get_n();
+	unsigned int m = m1.get_m();
+
+	matrix<_T> res(n, m);
+
+	for (int row = 0; row < n; row++)
+	{
+		for (int col = 0; col < m; col++)
+		{
+			_T value = m1.get_elem(row, col) * num;
+			res.set_elem(row, col, value);
+		}
+	}
+
+	return res;
+}
+
+template<typename _T>
+std::ostream& operator <<(std::ostream& os, matrix<_T>& matr)
 {
 	for (int row = 0; row < matr.get_n(); row++)
 	{
@@ -199,4 +315,68 @@ std::ostream& operator<<(std::ostream& os, matrix<_T>& matr)
 		os << std::endl;
 	}
 	return os;
+}
+
+
+template<typename T>
+Iterator<T>::Iterator(matrix<T>& matr)
+{
+	this->matr = &matr;
+	this->inx = 0;
+	this->size = matr.get_size();
+	this->currentValue = &(matr.get_elem(0, 0));
+}
+
+template<typename T>
+Iterator<T> Iterator<T>::next()
+{
+	this->inx++;
+	this->currentValue = &(matr->get_elem(inx));
+
+	return *this;
+}
+
+template<typename T>
+T Iterator<T>::value()
+{
+	return *(this->currentValue);
+}
+
+template<typename T>
+unsigned int Iterator<T>::get_size()
+{
+	return size;
+}
+
+template<typename T>
+bool Iterator<T>::is_end()
+{
+	return this->inx == this->size;
+}
+
+template<typename T>
+Iterator<T> Iterator<T>::operator++()
+{
+	this->inx++;
+	this->currentValue = &(matr->get_elem(inx));
+
+	return *this;
+}
+
+template<typename T>
+T& Iterator<T>::operator*()
+{
+	return *(this->currentValue);
+}
+
+template<typename T>
+bool Iterator<T>::operator==(Iterator& b)
+{
+	return this->value() == b.value();
+}
+
+template<typename T>
+bool Iterator<T>::operator!=(Iterator& b)
+{
+	return this->value() == b.value();
 }
