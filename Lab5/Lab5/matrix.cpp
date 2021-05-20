@@ -36,7 +36,7 @@ matrix<T>::matrix(matrix<T>& matr)
 template<typename T>
 matrix<T>::matrix(matrix<T>&& mat) : n(mat.get_n()), m(mat.get_m()), size(mat.get_size()), _matrix(mat.get_matrix())
 {
-	_matrix = nullptr;
+	mat.get_size();
 }
 
 // Constructor with initializer_list
@@ -260,6 +260,42 @@ matrix<_T> operator *(matrix<_T>& m1, matrix<_T>& m2)
 	}
 
 	return tmp;
+}
+
+template<typename _T>
+matrix<_T> operator+(matrix<_T>& m1, double num)
+{
+	unsigned int n = m1.get_n();
+	unsigned int m = m1.get_m();
+
+
+	matrix<_T> res(m1);
+
+	for (int row = 0, col = 0; row < n && col < m; row++, col++)
+	{
+		_T value = res.get_elem(row, col) + num;
+		res.set_elem(row, col, value);
+	}
+
+	return res;
+}
+
+template<typename _T>
+matrix<_T> operator-(matrix<_T>& m1, double num)
+{
+	unsigned int n = m1.get_n();
+	unsigned int m = m1.get_m();
+
+
+	matrix<_T> res(m1);
+
+	for (int row = 0, col = 0; row < n && col < m; row++, col++)
+	{
+		_T value = res.get_elem(row, col) - num;
+		res.set_elem(row, col, value);
+	}
+
+	return res;
 }
 
 template<typename _T>

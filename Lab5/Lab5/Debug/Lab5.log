@@ -1,28 +1,28 @@
 ﻿  main.cpp
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(26,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(18): message : во время компиляции функции-члена класс шаблон "matrix<int>::matrix(matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(27): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int>::matrix(matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(7): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<int>"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(28,25): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(141,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(131): message : во время компиляции функции-члена класс шаблон "matrix<int> &matrix<int>::operator =(matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(32): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int> &matrix<int>::operator =(matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(143,25): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(172,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(171): message : во время компиляции функции-члена класс шаблон "matrix<int> &matrix<int>::operator -=(matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\main.cpp(37): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int> &matrix<int>::operator -=(matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(174,25): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(309,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\main.cpp(19): message : выполняется компиляция ссылки на экземпляр шаблон функции "std::ostream &operator <<<int>(std::ostream &,matrix<int> &)"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(311,25): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(294,24): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\main.cpp(56): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int> operator *<int>(matrix<int> &,double)"
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(296,25): warning C4018: <: несоответствие типов со знаком и без знака
-G:\Documents\Qt\Lab5\Lab5\matrix.cpp(298,13): warning C4244: инициализация: преобразование "double" в "_T", возможна потеря данных
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(26,24): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(18): message : во время компиляции функции-члена класс шаблон "matrix<int>::matrix(matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(27): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int>::matrix(matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(7): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "matrix<int>"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(28,25): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(141,24): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(131): message : во время компиляции функции-члена класс шаблон "matrix<int> &matrix<int>::operator =(matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(32): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int> &matrix<int>::operator =(matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(143,25): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(172,24): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(171): message : во время компиляции функции-члена класс шаблон "matrix<int> &matrix<int>::operator -=(matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(37): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int> &matrix<int>::operator -=(matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(174,25): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(345,24): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(19): message : выполняется компиляция ссылки на экземпляр шаблон функции "std::ostream &operator <<<int>(std::ostream &,matrix<int> &)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(347,25): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(274,33): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\main.cpp(51): message : выполняется компиляция ссылки на экземпляр шаблон функции "matrix<int> operator +<int>(matrix<int> &,double)"
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(274,44): warning C4018: <: несоответствие типов со знаком и без знака
+C:\qt_proj\Labs-BMSTU_2\Lab5\Lab5\matrix.cpp(276,12): warning C4244: инициализация: преобразование "double" в "_T", возможна потеря данных
           with
           [
               _T=int
           ]
   matrix.cpp
   Создание кода...
-  Lab5.vcxproj -> G:\Documents\Qt\Lab5\Debug\Lab5.exe
+  Lab5.vcxproj -> C:\qt_proj\Labs-BMSTU_2\Lab5\Debug\Lab5.exe

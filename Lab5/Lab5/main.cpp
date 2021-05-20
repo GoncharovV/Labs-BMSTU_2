@@ -25,7 +25,7 @@ int main()
 	cout << endl;
 
 	matrix<int> matr3(matr2);
-	cout << "Copy" << endl;
+	cout << "Copy Constructor (matr2 to matr3)" << endl;
 	cout << matr3;
 	cout << endl;
 
@@ -48,13 +48,13 @@ int main()
 	cout << endl;
 
 
-	matrix<int> matr4 = matr1 + matr2;
+	matrix<int> matr4 = matr1 + 5;
 
 	cout << matr4;
 	cout << endl;
 
-	matrix<int> matr5 = matr1 * 10;
+	//matrix<int> matr5 = matr1 * 10;
 
-	cout << matr4;
+	//cout << matr4;
 
 }

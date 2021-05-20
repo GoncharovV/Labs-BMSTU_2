@@ -12,7 +12,7 @@ public:
 
 	matrix(matrix<T>& mat);
 
-	matrix(matrix<T>&& mat);
+	matrix(matrix<T>&& mat); // FIX
 
 	explicit matrix(std::initializer_list<std::initializer_list<T>> lst);
 
@@ -49,11 +49,11 @@ public:
 	template<typename _T>
 	friend matrix<_T> operator *(matrix<_T>& m1, matrix<_T>& m2);
 
-	//template<typename _T>
-	//friend matrix<_T> operator +(matrix<_T>& m1, double num);
+	template<typename _T>
+	friend matrix<_T> operator +(matrix<_T>& m1, double num);
 
-	//template<typename _T>
-	//friend matrix<_T> operator -(matrix<_T>& m1, double num);
+	template<typename _T>
+	friend matrix<_T> operator -(matrix<_T>& m1, double num);
 
 	template<typename _T>
 	friend matrix<_T> operator /(matrix<_T>& m1, double num);
