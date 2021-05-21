@@ -26,13 +26,13 @@ public:
 
 	bool is_square();
 
+	T* relese();
+
 	void set_elem(unsigned int n, unsigned int m, T& elem);
 
 	T& get_elem(unsigned int n, unsigned int m);
 
 	T& get_elem(unsigned int inx);
-
-	T* get_matrix();
 
 	matrix<T>& operator=(matrix<T>& matr);
 
@@ -65,35 +65,6 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, matrix<_T>& matr);
 
 	T& operator ()(unsigned int i, unsigned int j);
-
-/*	class Iterator
-	{
-	public:
-
-		Iterator(matrix<T>& matr);
-
-		Iterator next();
-
-		T value();
-
-		bool is_end();
-
-		Iterator& operator++();
-
-		T& operator*();
-
-		bool operator==(Iterator& b);
-
-		bool operator!=(Iterator& b);
-
-	private:
-		//matrix<T> matr;
-
-		T currentValue;
-
-		unsigned int inx;
-		unsigned int size;
-	}; */
 
 	Iterator<T> iterator_begin();
 

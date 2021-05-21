@@ -34,9 +34,12 @@ matrix<T>::matrix(matrix<T>& matr)
 
 // Transfer Constructor
 template<typename T>
-matrix<T>::matrix(matrix<T>&& mat) : n(mat.get_n()), m(mat.get_m()), size(mat.get_size()), _matrix(mat.get_matrix())
+matrix<T>::matrix(matrix<T>&& mat) 
 {
-	mat.get_size();
+	this->n = mat.get_n();
+	this->m = mat.get_m();
+	this->size = mat.get_size();
+	this->_matrix = mat.relese();
 }
 
 // Constructor with initializer_list
@@ -97,6 +100,16 @@ bool matrix<T>::is_square()
 	return n == m;
 }
 
+template<typename T>
+T* matrix<T>::relese()
+{
+	T* tmp = this->_matrix;
+
+	this->_matrix = nullptr;
+
+	return tmp;
+}
+
 // Set matrix element
 template<typename T>
 void matrix<T>::set_elem(unsigned int n, unsigned int m, T& elem)
@@ -117,12 +130,6 @@ template<typename T>
 T& matrix<T>::get_elem(unsigned int inx)
 {
 	return _matrix[inx];
-}
-
-template<typename T>
-T* matrix<T>::get_matrix()
-{
-	return _matrix;
 }
 
 // Assignment operator overloading

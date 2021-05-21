@@ -48,13 +48,20 @@ int main()
 	cout << endl;
 
 
-	matrix<int> matr4 = matr1 + 5;
-
+	matrix<int> matr4 = matr1 + matr3;
+	cout << "matr4 = matr1 + matr3" << endl;
 	cout << matr4;
 	cout << endl;
 
-	//matrix<int> matr5 = matr1 * 10;
+	matrix<int> matr5 = matr1 + 200;
+	cout << "matr5 = matr1 + 100" << endl;
+	cout << matr5;
+	cout << endl;
 
-	//cout << matr4;
+	matrix<int> matr6 = matr1 * 10;
+	cout << "matr6 = matr1 * 10" << endl;
+	cout << matr6;
+	cout << endl;
+
 
 }
