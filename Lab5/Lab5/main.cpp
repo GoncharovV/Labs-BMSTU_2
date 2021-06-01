@@ -38,7 +38,7 @@ int main()
 	cout << "matr1 -= matr3" << endl;
 	cout << matr1;
 	cout << endl;
-	
+
 	for (auto it = matr1.iterator_begin(); !it.is_end(); ++it)
 	{
 		*it = rand() % 10;
@@ -63,5 +63,41 @@ int main()
 	cout << matr6;
 	cout << endl;
 
+
+
+	try
+	{
+		matr4.get_elem(48190); 
+	}
+	catch (OutOfRange& error)
+	{
+		cout << error.what() << endl;
+	}
+
+	try
+	{
+		matr4.get_elem(48190);
+	}
+	catch (SegmentationFault& error)
+	{
+		cout << error.what() << endl;
+
+	}
+	catch (exception& err)
+	{
+		cout << "Catched with default exception class: " << err.what() << endl;
+	}
+
+
+	try
+	{
+		matr4.relese();
+		matr4.get_elem(1);
+	}
+	catch (SegmentationFault& error)
+	{
+		cout << error.what() << endl;
+
+	}
 
 }

@@ -144,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="OutOfRange.h" />
+    <ClInclude Include="SegmentationFault.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

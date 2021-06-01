@@ -1,4 +1,6 @@
 #include "matrix.h"
+#include "SegmentationFault.h"
+#include "OutOfRange.h"
 
 // Simple Constructor
 template<typename T>
@@ -114,22 +116,55 @@ T* matrix<T>::relese()
 template<typename T>
 void matrix<T>::set_elem(unsigned int n, unsigned int m, T& elem)
 {
-	if (n < this->n && m < this->m)
-		_matrix[n * this->get_n() + m] = elem;
+	if (_matrix == nullptr )
+	{
+		throw SegmentationFault("Memory access error");
+	}
+	else if (n * this->get_n() + m >= size)
+	{
+		throw OutOfRange("Index out of range");
+	}
+	else
+	{
+		if (n < this->n && m < this->m)
+			_matrix[n * this->get_n() + m] = elem;
+	}
 }
 
 // Get matrix element by index (n, m)
 template<typename T>
 T& matrix<T>::get_elem(unsigned int n, unsigned int m)
 {
-	return _matrix[n * this->get_n() + m];
+	if (_matrix == nullptr)
+	{
+		throw SegmentationFault("Memory access error");
+	}
+	else if (n * this->get_n() + m > size)
+	{
+		throw OutOfRange("Index out of range");
+	}
+	else
+	{
+		return _matrix[n * this->get_n() + m];
+	}
 }
 
 // Get matrix element by index (inx)
 template<typename T>
 T& matrix<T>::get_elem(unsigned int inx)
 {
-	return _matrix[inx];
+	if (_matrix == nullptr)
+	{
+		throw SegmentationFault("Memory access error");
+	}
+	else if (inx > this->get_size())
+	{
+		throw OutOfRange("Index out of range");
+	}
+	else
+	{
+		return _matrix[inx];
+	}
 }
 
 // Assignment operator overloading
@@ -373,10 +408,17 @@ Iterator<T>::Iterator(matrix<T>& matr)
 template<typename T>
 Iterator<T> Iterator<T>::next()
 {
-	this->inx++;
-	this->currentValue = &(matr->get_elem(inx));
+	if (inx + 1 > size)
+	{
+		throw OutOfRange("Out of Range");
+	}
+	else
+	{
+		this->inx++;
+		this->currentValue = &(matr->get_elem(inx));
 
-	return *this;
+		return *this;
+	}
 }
 
 template<typename T>
@@ -400,10 +442,7 @@ bool Iterator<T>::is_end()
 template<typename T>
 Iterator<T> Iterator<T>::operator++()
 {
-	this->inx++;
-	this->currentValue = &(matr->get_elem(inx));
-
-	return *this;
+	return next();
 }
 
 template<typename T>
