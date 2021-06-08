@@ -7,6 +7,8 @@ class QtSceneDrawer : public BaseSceneDrawer
 {
 public:
     QtSceneDrawer();
+
+    void DrawScene(Scene scene) override;
 };
 
 #endif // QTSCENEDRAWER_H
