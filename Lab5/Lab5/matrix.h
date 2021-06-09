@@ -12,7 +12,7 @@ public:
 
 	matrix(matrix<T>& mat);
 
-	matrix(matrix<T>&& mat); // FIX
+	matrix(matrix<T>&& mat); 
 
 	explicit matrix(std::initializer_list<std::initializer_list<T>> lst);
 
